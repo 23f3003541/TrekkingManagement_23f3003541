@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_admin.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar">
+      <div>≡</div>
+      <div>Admin</div>
+    </div>
+    <div id="app" class="tma-content">
+      <h3 class="mb-4">Dashboard</h3>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <div class="stat-tile">
+            <div><div class="value">[[ stats.total_treks ]]</div><div class="label">Total Treks</div></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-tile">
+            <div><div class="value">[[ stats.total_users ]]</div><div class="label">Total Users</div></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-tile">
+            <div><div class="value">[[ stats.total_staff ]]</div><div class="label">Total Staff</div></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-tile">
+            <div><div class="value">[[ stats.total_bookings ]]</div><div class="label">Total Bookings</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0" style="border:1px solid var(--stone-border) !important;">
+        <div class="card-body">
+          <h5 class="mb-3">Recent Bookings</h5>
+          <table class="table">
+            <thead><tr><th>Booking ID</th><th>User (Trekker)</th><th>Trek</th><th>Booking Date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr v-for="b in recentBookings" :key="b.id">
+                <td>#[[ b.id ]]</td><td>[[ b.user_name ]]</td><td>[[ b.trek_name ]]</td>
+                <td>[[ b.booking_date ]]</td>
+                <td><span class="badge" :class="'badge-status-' + b.status.toLowerCase()">[[ b.status ]]</span></td>
+              </tr>
+              <tr v-if="!recentBookings.length"><td colspan="5" class="text-center text-muted py-4">No bookings yet.</td></tr>
+            </tbody>
+          </table>
+          <a href="/admin/bookings" class="link-slate">View All Bookings</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
+{% endblock %}

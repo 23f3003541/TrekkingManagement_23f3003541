@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Trekking History — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_user.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Trekker</div></div>
+    <div id="app" class="tma-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Trekking History</h3>
+        <button class="btn btn-forest btn-sm" @click="exportCsv" :disabled="exporting">
+          [[ exporting ? 'Preparing export…' : 'Export as CSV' ]]
+        </button>
+      </div>
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <table class="table">
+            <thead><tr><th>Trek Name</th><th>Trek Dates</th><th>Completed On</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr v-for="h in history" :key="h.trek_id + h.booking_date">
+                <td>[[ h.trek_name ]]</td><td>[[ h.trek_dates ]]</td><td>[[ h.completed_on || '—' ]]</td>
+                <td><span class="badge" :class="'badge-status-' + h.status.toLowerCase()">[[ h.status ]]</span></td>
+              </tr>
+              <tr v-if="!history.length"><td colspan="4" class="text-center text-muted py-4">Nothing here yet.</td></tr>
+            </tbody>
+          </table>
+          <div class="info-note">History shows all your completed and cancelled treks.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/user_history.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Manage Treks — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_admin.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Admin</div></div>
+    <div id="app" class="tma-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Treks</h3>
+        <button class="btn btn-sunrise" @click="showForm = !showForm">+ Add New Trek</button>
+      </div>
+
+      <div v-if="showForm" class="card mb-4" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <h6 class="mb-3">New Trek</h6>
+          <form @submit.prevent="createTrek" class="row g-2">
+            <div class="col-md-4"><input class="form-control" placeholder="Trek Name" v-model="form.trek_name" required></div>
+            <div class="col-md-4"><input class="form-control" placeholder="Location" v-model="form.location" required></div>
+            <div class="col-md-4">
+              <select class="form-select" v-model="form.difficulty" required>
+                <option disabled value="">Difficulty</option>
+                <option>Easy</option><option>Moderate</option><option>Hard</option>
+              </select>
+            </div>
+            <div class="col-md-3"><input type="number" class="form-control" placeholder="Duration (days)" v-model="form.duration_days" required></div>
+            <div class="col-md-3"><input type="number" class="form-control" placeholder="Available Slots" v-model="form.available_slots" required></div>
+            <div class="col-md-3"><input type="date" class="form-control" v-model="form.start_date"></div>
+            <div class="col-md-3"><input type="date" class="form-control" v-model="form.end_date"></div>
+            <div class="col-12 mt-2">
+              <button class="btn btn-forest" type="submit">Create Trek</button>
+              <button class="btn btn-outline-secondary" type="button" @click="showForm=false">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <input class="form-control mb-3" style="max-width:320px;" placeholder="Search treks..." v-model="search">
+          <table class="table">
+            <thead><tr><th>ID</th><th>Trek Name</th><th>Location</th><th>Difficulty</th><th>Slots</th><th>Status</th><th>Assigned Staff</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr v-for="t in filteredTreks" :key="t.id">
+                <td>[[ t.id ]]</td><td>[[ t.trek_name ]]</td><td>[[ t.location ]]</td>
+                <td><span class="badge" :class="'badge-difficulty-' + t.difficulty.toLowerCase()">[[ t.difficulty ]]</span></td>
+                <td>[[ t.available_slots ]]</td>
+                <td><span class="badge" :class="'badge-status-' + t.status.toLowerCase()">[[ t.status ]]</span></td>
+                <td>
+                  <select class="form-select form-select-sm" style="min-width:150px;"
+                          :value="t.assigned_staff_id || ''" @change="assignStaff(t, $event.target.value)">
+                    <option value="">Unassigned</option>
+                    <option v-for="s in staffList" :key="s.staff_profile_id" :value="s.staff_profile_id">[[ s.full_name ]]</option>
+                  </select>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-outline-secondary" @click="editTrek(t)">Edit</button>
+                  <button class="btn btn-sm btn-outline-danger" @click="deleteTrek(t.id)">Delete</button>
+                </td>
+              </tr>
+              <tr v-if="!filteredTreks.length"><td colspan="8" class="text-center text-muted py-4">No treks yet — add your first one above.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin_treks.js') }}"></script>
+{% endblock %}

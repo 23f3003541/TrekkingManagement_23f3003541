@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Register — Trekking Management Application{% endblock %}
+{% block body %}
+<div class="auth-wrap">
+  <div class="auth-visual">
+    <div class="eyebrow" style="color:#bcd6bb">Join as a Trekker</div>
+    <h1 style="color:#fff; font-size:2.2rem; max-width:420px;">Every trail starts<br>with a first step.</h1>
+    <p style="color:#d3e3d3; max-width:380px;">Create your account to browse open treks, book your slot, and track your trekking history.</p>
+    <svg class="ridge" viewBox="0 0 500 140" preserveAspectRatio="none" style="height:140px;">
+      <polyline points="0,140 60,60 110,100 170,30 230,90 300,40 360,95 420,55 500,110 500,140 0,140" fill="#1b3322" opacity="0.9"/>
+      <polyline points="0,140 40,100 100,120 150,70 220,110 280,75 340,115 400,85 460,120 500,100 500,140 0,140" fill="#24462f" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <div class="auth-form-side">
+    <div id="app" class="auth-card" style="max-width:460px;">
+      <h3 class="mb-1">Create User Account</h3>
+      <p class="text-muted mb-3" style="font-size:.9rem;">Register as a Trekker</p>
+
+      <form @submit.prevent="register">
+        <div class="mb-3">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" v-model="full_name" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-control" v-model="email" required>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" v-model="password" required minlength="6">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" v-model="confirm_password" required minlength="6">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Contact Number</label>
+          <input type="tel" class="form-control" v-model="contact_number" required pattern="[0-9]{10}" >
+        </div>
+        <div v-if="error" class="alert alert-danger py-2" style="font-size:.85rem;">[[ error ]]</div>
+        <button type="submit" class="btn btn-forest w-100" :disabled="loading">
+          [[ loading ? 'Creating account…' : 'Register' ]]
+        </button>
+      </form>
+
+      <p class="text-center mt-3 mb-3" style="font-size:.88rem;">
+        Already have an account? <a class="link-slate" href="/login">Login here</a>
+      </p>
+      <div class="info-note">Only Users (Trekkers) can register themselves. Trekking Staff are created by Admin.</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+{% endblock %}

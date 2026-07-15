@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Users (Trekkers) — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_admin.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div> Admin</div></div>
+    <div id="app" class="tma-content">
+      <h3 class="mb-3">Users (Trekkers)</h3>
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <input class="form-control mb-3" style="max-width:320px;" placeholder="Search users..." v-model="search" @input="loadUsers">
+          <table class="table">
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Contact</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr v-for="u in users" :key="u.id">
+                <td>[[ u.id ]]</td><td>[[ u.full_name ]]</td><td>[[ u.email ]]</td><td>[[ u.contact_number ]]</td>
+                <td><span class="badge" :class="u.status === 'Active' ? 'badge-active' : 'badge-blacklisted'">[[ u.status ]]</span></td>
+                <td>
+                  <button class="btn btn-sm" :class="u.status==='Active' ? 'btn-outline-danger' : 'btn-outline-success'"
+                          @click="toggleStatus(u)">[[ u.status === 'Active' ? 'Blacklist' : 'Whitelist' ]]</button>
+                </td>
+              </tr>
+              <tr v-if="!users.length"><td colspan="6" class="text-center text-muted py-4">No users yet.</td></tr>
+            </tbody>
+          </table>
+          <div class="info-note mt-2">Blacklisted users cannot login or book treks.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin_users.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Manage Trek — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_staff.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Trek Staff</div></div>
+    <div id="app" class="tma-content" data-trek-id="{{ trek_id }}">
+      <a href="/staff/dashboard" class="link-slate d-inline-block mb-2">Back to My Treks</a>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card" style="border:1px solid var(--stone-border);">
+            <div class="card-body">
+              <h5 class="mb-3">Trek Details</h5>
+              <p class="mb-1"><strong>Location:</strong> [[ trek.location ]]</p>
+              <p class="mb-1"><strong>Difficulty:</strong> [[ trek.difficulty ]]</p>
+              <p class="mb-1"><strong>Duration:</strong> [[ trek.duration_days ]] Days</p>
+              <p class="mb-1"><strong>Start Date:</strong> [[ trek.start_date ]]</p>
+              <p class="mb-1"><strong>End Date:</strong> [[ trek.end_date ]]</p>
+              <hr>
+              <div class="mb-2">
+                <label class="form-label">Available Slots</label>
+                <input type="number" class="form-control" v-model="editSlots">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select class="form-select" v-model="editStatus"><option>Open</option><option>Closed</option></select>
+              </div>
+              <button class="btn btn-forest w-100 mb-2" @click="updateTrek">Update Trek</button>
+              <button v-if="trek.status !== 'Open' && trek.status !== 'Completed'" class="btn btn-outline-primary w-100 mb-2" @click="markStarted">Start Trek</button>
+              <button v-if="trek.status === 'Open'" class="btn btn-outline-secondary w-100 mb-2" @click="markStarted">Restart Trek</button>
+              <button class="btn btn-outline-success w-100" @click="markCompleted">Mark as Completed</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card" style="border:1px solid var(--stone-border);">
+            <div class="card-body">
+              <h5 class="mb-3">Participants ([[ participants.length ]])</h5>
+              <table class="table">
+                <thead><tr><th>#</th><th>User ID</th><th>Booking Date</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr v-for="(p, i) in participants" :key="p.booking_id">
+                    <td>[[ i + 1 ]]</td><td>[[ p.user_id ]]</td><td>[[ p.booking_date ]]</td>
+                    <td><span class="badge" :class="'badge-status-' + p.status.toLowerCase()">[[ p.status ]]</span></td>
+                  </tr>
+                  <tr v-if="!participants.length"><td colspan="4" class="text-center text-muted py-4">No participants yet.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/staff_manage_trek.js') }}"></script>
+{% endblock %}

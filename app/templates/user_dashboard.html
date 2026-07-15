@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_user.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>[[ profileName || 'Trekker' ]]</div></div>
+    <div id="app" class="tma-content">
+      <h3 class="mb-4">Welcome, [[ profileName || 'Trekker' ]]!</h3>
+
+      <div class="card mb-4" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">My Profile</h5>
+            <button class="btn btn-sm btn-outline-secondary" @click="editingProfile = !editingProfile">
+              [[ editingProfile ? 'Cancel' : 'Edit Profile' ]]
+            </button>
+          </div>
+          <form v-if="editingProfile" @submit.prevent="saveProfile" class="row g-2 mt-2">
+            <div class="col-md-5"><input class="form-control" placeholder="Full Name" v-model="profileForm.full_name" required></div>
+            <div class="col-md-5"><input class="form-control" placeholder="Contact Number" v-model="profileForm.contact_number"></div>
+            <div class="col-md-2"><button class="btn btn-forest w-100" type="submit">Save</button></div>
+          </form>
+          <p v-else class="text-muted mb-0 mt-2">[[ profileName ]] · [[ profileContact || 'No contact number on file' ]]</p>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Available Treks</h5>
+        <div class="d-flex gap-2">
+          <select class="form-select form-select-sm" v-model="difficulty" @change="loadTreks">
+            <option value="">Difficulty: All</option><option>Easy</option><option>Moderate</option><option>Hard</option>
+          </select>
+          <select class="form-select form-select-sm" v-model="location" @change="loadTreks">
+            <option value="">Location: All</option>
+            <option v-for="loc in locations" :key="loc">[[ loc ]]</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-4" v-for="t in treks" :key="t.id">
+          <div class="trek-card">
+            <div class="trek-banner">
+              <svg viewBox="0 0 300 60" preserveAspectRatio="none"><polyline points="0,60 40,20 80,45 130,10 180,40 230,15 300,50 300,60 0,60" fill="#16281c" opacity="0.5"/></svg>
+            </div>
+            <div class="trek-body">
+              <h6 class="mb-1">[[ t.trek_name ]]</h6>
+              <p class="text-muted mb-1" style="font-size:.85rem;">[[ t.location ]]</p>
+              <p class="mb-2" style="font-size:.85rem;">[[ t.difficulty ]] · [[ t.duration_days ]] Days · Slots Left: [[ t.available_slots ]]</p>
+              <button class="btn btn-sm w-100" :class="t.available_slots > 0 ? 'btn-forest' : 'btn-outline-secondary'"
+                      :disabled="t.available_slots <= 0" @click="book(t)">
+                [[ t.available_slots > 0 ? 'Book Now' : 'Not Available' ]]
+              </button>
+            </div>
+          </div>
+        </div>
+        <div v-if="!treks.length" class="col-12 text-center text-muted py-4">No treks match your filters.</div>
+      </div>
+
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">My Bookings</h5>
+            <a class="btn btn-sm btn-outline-forest" href="/user/bookings">Manage My Treks</a>
+          </div>
+          <table class="table">
+            <thead><tr><th>Trek Name</th><th>Booking Date</th><th>Trek Dates</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr v-for="b in myBookings" :key="b.booking_id">
+                <td>[[ b.trek_name ]]</td><td>[[ b.booking_date ]]</td><td>[[ b.trek_dates ]]</td>
+                <td><span class="badge" :class="'badge-status-' + b.status.toLowerCase()">[[ b.status ]]</span></td>
+                <td><a class="link-slate" href="#">View Details</a></td>
+              </tr>
+              <tr v-if="!myBookings.length"><td colspan="5" class="text-center text-muted py-4">No bookings yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/user_dashboard.js') }}"></script>
+{% endblock %}

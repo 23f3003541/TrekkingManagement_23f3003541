@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Trekking Staff — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_admin.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Admin</div></div>
+    <div id="app" class="tma-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Trekking Staff List</h3>
+        <a href="/admin/staff/new" class="btn btn-sunrise">+ Add New Staff</a>
+      </div>
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <input class="form-control mb-3" style="max-width:320px;" placeholder="Search trekking staff..." v-model="search" @input="loadStaff">
+          <table class="table">
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Contact</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr v-for="s in staff" :key="s.id">
+                <td>[[ s.id ]]</td><td>[[ s.full_name ]]</td><td>[[ s.email ]]</td><td>[[ s.contact_number ]]</td>
+                <td><span class="badge" :class="s.status === 'Active' ? 'badge-active' : 'badge-blacklisted'">[[ s.status ]]</span></td>
+                <td>
+                  <button class="btn btn-sm" :class="s.status==='Active' ? 'btn-outline-danger' : 'btn-outline-success'"
+                          @click="toggleStatus(s)">[[ s.status === 'Active' ? 'Blacklist' : 'Whitelist' ]]</button>
+                </td>
+              </tr>
+              <tr v-if="!staff.length"><td colspan="6" class="text-center text-muted py-4">No staff yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin_staff.js') }}"></script>
+{% endblock %}

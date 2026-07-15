@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Login — Trekking Management Application{% endblock %}
+{% block body %}
+<div class="auth-wrap">
+  <div class="auth-visual">
+    <div class="eyebrow" style="color:#bcd6bb">Trekking Management Application</div>
+    <h1 style="color:#fff; font-size:2.2rem; max-width:420px;">Plan the climb.<br>Track every step.</h1>
+    <p style="color:#d3e3d3; max-width:380px;">One system for admins, trek staff, and trekkers — routes, slots, bookings, and history, all in one place.</p>
+    <svg class="ridge" viewBox="0 0 500 140" preserveAspectRatio="none" style="height:140px;">
+      <polyline points="0,140 60,60 110,100 170,30 230,90 300,40 360,95 420,55 500,110 500,140 0,140" fill="#1b3322" opacity="0.9"/>
+      <polyline points="0,140 40,100 100,120 150,70 220,110 280,75 340,115 400,85 460,120 500,100 500,140 0,140" fill="#24462f" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <div class="auth-form-side">
+    <div id="app" class="auth-card">
+      <h3 class="mb-1">Welcome back</h3>
+      <p class="text-muted mb-3" style="font-size:.9rem;">Login to your account</p>
+
+
+      <form @submit.prevent="login">
+        <div class="mb-3">
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-control" v-model="email" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" v-model="password" required>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="remember" v-model="remember">
+          <label class="form-check-label" for="remember" style="font-size:.85rem;">Remember me</label>
+        </div>
+        <div v-if="error" class="alert alert-danger py-2" style="font-size:.85rem;">[[ error ]]</div>
+        <button type="submit" class="btn btn-forest w-100" :disabled="loading">
+          [[ loading ? 'Logging in…' : 'Login' ]]
+        </button>
+      </form>
+
+      <p class="text-center mt-3 mb-3" style="font-size:.88rem;">
+        Don't have an account? <a class="link-slate" href="/register">Register as User (Trekker)</a>
+      </p>
+
+      <div class="info-note">Only Users (Trekkers) can register themselves. Trekking Staff are created by Admin.</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}

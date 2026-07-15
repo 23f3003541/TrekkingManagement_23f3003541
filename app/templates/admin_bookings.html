@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}All Bookings — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_admin.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Bookings</div></div>
+    <div id="app" class="tma-content">
+      <h3 class="mb-4">All Bookings</h3>
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr><th>ID</th><th>User</th><th>Trek</th><th>Booking Date</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr v-for="b in bookings" :key="b.id">
+                <td>[[ b.id ]]</td><td>[[ b.user_name || b.user_id ]]</td><td>[[ b.trek_name || b.trek_id ]]</td><td>[[ b.booking_date ]]</td><td>[[ b.status ]]</td>
+              </tr>
+              <tr v-if="!bookings.length"><td colspan="5" class="text-center text-muted py-4">No bookings yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin_bookings.js') }}"></script>
+{% endblock %}

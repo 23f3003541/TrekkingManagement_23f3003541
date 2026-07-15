@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}New Trekking Staff — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_admin.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Admin</div></div>
+    <div id="app" class="tma-content" style="max-width:640px;">
+      <h3 class="mb-4">Create New Trekking Staff</h3>
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <form @submit.prevent="createStaff">
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Full Name</label><input class="form-control" v-model="form.full_name" required></div>
+              <div class="col-md-6"><label class="form-label">Email Address</label><input type="email" class="form-control" v-model="form.email" required></div>
+              <div class="col-md-6"><label class="form-label">Contact Number</label><input class="form-control" v-model="form.contact_number" required></div>
+              <div class="col-md-6"><label class="form-label">Password</label><input type="password" class="form-control" v-model="form.password" required></div>
+              <div class="col-md-6"><label class="form-label">Confirm Password</label><input type="password" class="form-control" v-model="confirm_password" required></div>
+              <div class="col-md-6"><label class="form-label">Experience (e.g., 5 years)</label><input class="form-control" v-model="form.experience"></div>
+              <div class="col-12"><label class="form-label">Specialization (e.g., High Altitude, First Aid)</label><input class="form-control" v-model="form.specialization"></div>
+              <div class="col-md-6">
+                <label class="form-label">Status</label>
+                <select class="form-select" v-model="form.status"><option>Active</option><option>Inactive</option></select>
+              </div>
+            </div>
+
+            <div v-if="error" class="alert alert-danger py-2 mt-3" style="font-size:.85rem;">[[ error ]]</div>
+            <div class="mt-4">
+              <button type="submit" class="btn btn-forest">Create Staff</button>
+              <a href="/admin/staff" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+          </form>
+          <div class="info-note mt-3">The staff will receive their login credentials.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin_staff_new.js') }}"></script>
+{% endblock %}

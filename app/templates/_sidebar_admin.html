@@ -1,0 +1,16 @@
+<aside class="tma-sidebar">
+  <div class="brand">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 20 L9 8 L13 15 L16 10 L21 20 Z" fill="#e7ede8"/></svg>
+    Trekking MA
+  </div>
+  <nav class="nav flex-column">
+    <a class="nav-link {{ 'active' if active=='dashboard' }}" href="/admin/dashboard">Dashboard</a>
+    <a class="nav-link {{ 'active' if active=='treks' }}" href="/admin/treks">Treks</a>
+    <a class="nav-link {{ 'active' if active=='staff' }}" href="/admin/staff">Staff</a>
+    <a class="nav-link {{ 'active' if active=='users' }}" href="/admin/users">Users</a>
+    <a class="nav-link {{ 'active' if active=='search' }}" href="/admin/search">Search</a>
+    <a class="nav-link {{ 'active' if active=='reports' }}" href="/admin/reports">Reports</a>
+    <a class="nav-link {{ 'active' if active=='bookings' }}" href="/admin/bookings">Bookings</a>
+    <a class="nav-link" href="/login">Logout</a>
+  </nav>
+</aside>

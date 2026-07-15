@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Staff Dashboard — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_staff.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Trek Staff Dashboard</div></div>
+    <div id="app" class="tma-content">
+      <h3 class="mb-4">My Dashboard</h3>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="stat-tile"><div><div class="value">[[ stats.assigned_treks ]]</div><div class="label">Assigned Treks</div></div></div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-tile"><div><div class="value">[[ stats.total_participants ]]</div><div class="label">Total Participants</div></div></div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-tile"><div><div class="value">[[ stats.ongoing_treks ]]</div><div class="label">Ongoing Treks</div></div></div>
+        </div>
+      </div>
+
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <h5 class="mb-3">My Assigned Treks</h5>
+          <table class="table">
+            <thead><tr><th>Trek Name</th><th>Dates</th><th>Participants</th><th>Slots</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr v-for="t in treks" :key="t.id">
+                <td>[[ t.trek_name ]]</td>
+                <td>[[ t.start_date ]] – [[ t.end_date ]]</td>
+                <td>[[ t.booked_count ?? '—' ]]</td>
+                <td>[[ t.available_slots ]]</td>
+                <td><span class="badge" :class="'badge-status-' + t.status.toLowerCase()">[[ t.status ]]</span></td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <a class="btn btn-sm btn-forest" :href="'/staff/treks/' + t.id">[[ t.status === 'Completed' ? 'View' : 'Manage' ]]</a>
+                    <a class="btn btn-sm btn-outline-secondary" :href="'/staff/treks/' + t.id + '/participants'">Participants</a>
+                  </div>
+                </td>
+              </tr>
+              <tr v-if="!treks.length"><td colspan="6" class="text-center text-muted py-4">No treks assigned to you yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/staff_dashboard.js') }}"></script>
+{% endblock %}

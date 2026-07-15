@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}My Bookings — Trekking Management Application{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_user.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>[[ profileName || 'Trekker' ]]</div></div>
+    <div id="app" class="tma-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h3 class="mb-0">My Treks</h3>
+          <p class="text-muted mb-0">View all your active and past trek reservations.</p>
+        </div>
+        <div>
+          <a class="btn btn-outline-secondary btn-sm" href="/user/dashboard">Back to Dashboard</a>
+        </div>
+      </div>
+
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <table class="table">
+            <thead><tr><th>Trek Name</th><th>Booking Date</th><th>Trek Dates</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr v-for="b in bookings" :key="b.booking_id">
+                <td>[[ b.trek_name ]]</td>
+                <td>[[ b.booking_date ]]</td>
+                <td>[[ b.trek_dates ]]</td>
+                <td><span class="badge" :class="'badge-status-' + b.status.toLowerCase()">[[ b.status ]]</span></td>
+                <td>
+                  <button v-if="b.status === 'Booked'" class="btn btn-sm btn-outline-danger" @click="cancelBooking(b.booking_id)">Cancel</button>
+                  <span v-else class="text-muted">—</span>
+                </td>
+              </tr>
+              <tr v-if="!bookings.length"><td colspan="5" class="text-center text-muted py-4">You have no current bookings.</td></tr>
+            </tbody>
+          </table>
+          <div v-if="error" class="alert alert-danger mt-2">[[ error ]]</div>
+          <div v-if="success" class="alert alert-success mt-2">[[ success ]]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/user_bookings.js') }}"></script>
+{% endblock %}

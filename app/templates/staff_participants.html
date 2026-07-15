@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Staff Participants — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_staff.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Participants</div></div>
+    <div id="app" class="tma-content" data-trek-id="{{ trek_id }}">
+      <a href="/staff/dashboard" class="link-slate d-inline-block mb-2">Back to Dashboard</a>
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <h5 class="mb-3">Participants for [[ trekName ]]</h5>
+          <table class="table">
+            <thead><tr><th>#</th><th>User ID</th><th>Booking Date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr v-for="(p, i) in participants" :key="p.booking_id">
+                <td>[[ i + 1 ]]</td>
+                <td>[[ p.user_id ]]</td>
+                <td>[[ p.booking_date ]]</td>
+                <td>[[ p.status ]]</td>
+              </tr>
+              <tr v-if="!participants.length"><td colspan="4" class="text-center text-muted py-4">No participants found.</td></tr>
+            </tbody>
+          </table>
+          <div v-if="error" class="alert alert-danger mt-3">[[ error ]]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/staff_participants.js') }}"></script>
+{% endblock %}

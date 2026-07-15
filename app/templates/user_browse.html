@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Browse Treks — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_user.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Trekker</div></div>
+    <div id="app" class="tma-content">
+      <h3 class="mb-3">Browse Treks</h3>
+      <div class="d-flex gap-2 mb-4">
+        <input class="form-control" placeholder="Search treks..." v-model="q" @input="loadTreks">
+        <select class="form-select" style="max-width:170px;" v-model="difficulty" @change="loadTreks">
+          <option value="">Difficulty: All</option><option>Easy</option><option>Moderate</option><option>Hard</option>
+        </select>
+        <select class="form-select" style="max-width:170px;" v-model="location" @change="loadTreks">
+          <option value="">Location: All</option>
+          <option v-for="loc in locations" :key="loc">[[ loc ]]</option>
+        </select>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-4" v-for="t in treks" :key="t.id">
+          <div class="trek-card">
+            <div class="trek-banner">
+              <svg viewBox="0 0 300 60" preserveAspectRatio="none"><polyline points="0,60 40,20 80,45 130,10 180,40 230,15 300,50 300,60 0,60" fill="#16281c" opacity="0.5"/></svg>
+            </div>
+            <div class="trek-body">
+              <h6 class="mb-1">[[ t.trek_name ]]</h6>
+              <p class="text-muted mb-1" style="font-size:.85rem;">[[ t.location ]]</p>
+              <p class="mb-2" style="font-size:.85rem;">[[ t.difficulty ]] · [[ t.duration_days ]] Days · Slots Left: [[ t.available_slots ]]</p>
+              <div class="d-grid gap-2">
+                <button class="btn btn-sm btn-outline-forest" style="border-color: var(--forest); color: var(--forest);" @click="viewDetails(t)">View Details</button>
+                <button class="btn btn-sm btn-forest" :disabled="t.available_slots <= 0" @click="book(t)">
+                  [[ t.available_slots > 0 ? 'Book Now' : 'Not Available' ]]
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="!treks.length" class="col-12 text-center text-muted py-4">No treks found.</div>
+      </div>
+
+      <nav v-if="pages > 1">
+        <ul class="pagination">
+          <li class="page-item" v-for="p in pages" :key="p" :class="{active: p === page}">
+            <a class="page-link" href="#" @click.prevent="page = p; loadTreks()">[[ p ]]</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/user_browse.js') }}"></script>
+{% endblock %}

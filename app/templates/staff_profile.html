@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Staff Profile — TMA{% endblock %}
+{% block body %}
+<div class="tma-shell">
+  {% include "_sidebar_staff.html" with context %}
+  <div class="tma-main">
+    <div class="tma-topbar"><div>≡</div><div>Staff Profile</div></div>
+    <div id="app" class="tma-content" style="max-width:720px;">
+      <h3 class="mb-4">Profile</h3>
+      <div class="card" style="border:1px solid var(--stone-border);">
+        <div class="card-body">
+          <form @submit.prevent="saveProfile">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input class="form-control" v-model="form.full_name" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email Address</label>
+                <input class="form-control" v-model="form.email" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Contact Number</label>
+                <input class="form-control" v-model="form.contact_number">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Status</label>
+                <input class="form-control" v-model="form.status" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Experience</label>
+                <input class="form-control" v-model="form.experience">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Specialization</label>
+                <input class="form-control" v-model="form.specialization">
+              </div>
+            </div>
+            <div v-if="error" class="alert alert-danger py-2 mt-3">[[ error ]]</div>
+            <div v-if="success" class="alert alert-success py-2 mt-3">[[ success ]]</div>
+            <div class="mt-4 d-flex gap-2">
+              <button type="submit" class="btn btn-forest">Save Profile</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/staff_profile.js') }}"></script>
+{% endblock %}
